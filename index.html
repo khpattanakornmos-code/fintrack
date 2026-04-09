@@ -742,6 +742,10 @@ function saveInc(){
   var amt=document.getElementById('inc-amt').value;
   if(!amt){alert('กรุณากรอกจำนวนเงิน');return;}
   document.getElementById('saving-inc').style.display='block';
+  var data = getIncomeData();
+  if(APPS_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    saveToSheet('income', data);
+  }
   setTimeout(function(){
     document.getElementById('saving-inc').style.display='none';
     showToast('t-inc','บันทึกรายรับ '+fmt(parseFloat(amt))+' สำเร็จ!');
@@ -755,6 +759,10 @@ function saveExp(){
   var amt=document.getElementById('exp-amt').value;
   if(!amt){alert('กรุณากรอกจำนวนเงิน');return;}
   document.getElementById('saving-exp').style.display='block';
+  var data = getExpenseData();
+  if(APPS_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL_HERE") {
+    saveToSheet('expense', data);
+  }
   setTimeout(function(){
     document.getElementById('saving-exp').style.display='none';
     showToast('t-exp');
@@ -811,6 +819,53 @@ var today=new Date();
 });
 document.getElementById('hdr-date').textContent='วันนี้ '+today.getDate()+' เมษายน 2569';
 buildBars('bar-chart',barData);
+
+// ── Google Sheets Backend ─────────────────────────────────────
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGpIECMezcVHaKv9P8DMkhENS_eshdq6egoE3Qf3sPPpPkzES7ZXYeDhUEpY7pGDRY/exec"; // ← วาง URL ของ Apps Script ที่นี่
+
+function saveToSheet(type, data) {
+  data.type = type;
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(function() {
+    console.log("บันทึกสำเร็จ:", type);
+  }).catch(function(err) {
+    console.error("บันทึกไม่สำเร็จ:", err);
+  });
+}
+
+function getIncomeData() {
+  var ch = document.querySelector('#inc-ch-tags .tag.active');
+  var slip = document.querySelector('[onclick*="inc-slip"] .tag.active') || 
+             document.querySelector('.tag-wrap .tag.active[onclick*="inc-slip"]');
+  return {
+    date: document.getElementById('inc-date').value,
+    channel: ch ? ch.textContent.trim().replace(/^[^\w฀-๿]+/,'') : 'Shopee',
+    customer: document.getElementById('inc-cust').value,
+    product_type: document.getElementById('inc-prod') ? document.getElementById('inc-prod').value : '',
+    amount: document.getElementById('inc-amt').value,
+    note: document.getElementById('inc-note').value,
+    has_slip: 'ไม่มี'
+  };
+}
+
+function getExpenseData() {
+  var cat = document.querySelector('#pg-exp .tag.active.red');
+  var pay = document.querySelector('[onclick*="exp-pay"] .tag.active');
+  return {
+    date: document.getElementById('exp-date').value,
+    category: cat ? cat.textContent.trim().replace(/^[^\w฀-๿]+/,'') : 'ต้นทุน/สินค้า',
+    detail: document.getElementById('exp-detail').value,
+    payee: document.getElementById('exp-payee').value,
+    payment: pay ? pay.textContent.trim() : 'โอนเงิน',
+    amount: document.getElementById('exp-amt').value,
+    note: document.getElementById('exp-note') ? document.getElementById('exp-note').value : '',
+    has_receipt: 'ไม่มี'
+  };
+}
 </script>
 </body>
 </html>

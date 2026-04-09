@@ -454,7 +454,7 @@ html,body{height:100%;overflow:hidden;font-family:'Prompt','Sarabun',system-ui,s
 var API = "https://script.google.com/macros/s/AKfycbyPh5RPqZJ5M49HE3_zo1BAgMb1GChZMlsTbWdufP9HK3OoMAYvwr3DraRujlE1kh-0/exec";
 var MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 var THAI_MON = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-var _sc = null, _st = 0, CACHE_TTL = 60000;
+var _sc = null, _st = 0, CACHE_TTL = 0;
 var _hd = [], _hf = 'all', _hs = '', _hl = false;
 var _rptIdx = 0, _rptInc = 0, _rptExp = 0;
 var _barData = [];
@@ -477,9 +477,9 @@ function goP(id,btn){
   document.querySelectorAll('.ni').forEach(function(b){ b.classList.remove('on'); });
   document.getElementById('pg-'+id).classList.add('on');
   btn.classList.add('on');
-  if(id==='dash') loadSum();
-  if(id==='hist') loadHist(false);
-  if(id==='rpt')  loadRpt();
+  if(id==='dash'){ _sc=null; loadSum(); }
+  if(id==='hist'){ _hl=false; loadHist(true); }
+  if(id==='rpt')  { loadRpt(); }
 }
 
 function dTab(t,el){
@@ -996,6 +996,16 @@ document.getElementById('hdate').textContent='วันนี้ '+_now.getDate(
 _rptIdx=_now.getMonth();
 document.getElementById('r-mon').textContent=MONTHS[_rptIdx]+' '+(_now.getFullYear()+543);
 loadSum();
-setTimeout(function(){ loadHist(true); },600);
+setTimeout(function(){ loadHist(true); }, 600);
+
+// ── Auto-refresh ทุก 30 วินาที ──
+setInterval(function(){
+  _sc = null;
+  _hl = false;
+  loadSum();
+  if(document.getElementById('pg-hist') && document.getElementById('pg-hist').classList.contains('on')){
+    loadHist(true);
+  }
+}, 30000);
 </script></body>
 </html>

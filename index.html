@@ -675,7 +675,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
         <div class="cat-item"><div class="cat-name">อื่นๆ</div><div class="cat-track"><div class="cat-fill" style="width:9%;background:#888780"></div></div><div class="cat-val" style="color:#444441">฿2,000</div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-        <button class="btn btn-green" onclick="downloadCSV()" style="display:flex;align-items:center;justify-content:center;gap:8px">
+        <button id="csv-dl-btn" class="btn btn-green" onclick="downloadCSV()" style="display:flex;align-items:center;justify-content:center;gap:8px">
           <span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV
         </button>
         <button class="btn" onclick="downloadHTML()" style="background:rgba(226,185,126,0.2);color:#E2B97E;border:1px solid rgba(226,185,126,0.3);display:flex;align-items:center;justify-content:center;gap:8px">
@@ -753,6 +753,8 @@ function goPage(id,btn){
   btn.classList.add('active');
   if(id==='dash'){buildBars('bar-chart',barData);loadSummary();}
   if(id==='hist'){loadHistory(false);}
+  if(id==='rpt'){loadReportData();}
+  if(id==='rpt'){loadReportData();}
 }
 
 function dashTab(t,el){
@@ -1198,12 +1200,46 @@ function filterHistory(q){ filterHistoryLive(q); }
 
 function changeMonth(d){
   rptIdx=Math.max(0,Math.min(11,rptIdx+d));
-  var rd=rptData[rptIdx];
   document.getElementById('rpt-month').textContent=months[rptIdx]+' 2569';
-  document.getElementById('r-inc').textContent=fmt(rd.i);
-  document.getElementById('r-exp').textContent=fmt(rd.e);
-  document.getElementById('r-bal').textContent=fmt(rd.i-rd.e);
-  document.getElementById('r-pct').textContent=pct(rd.i-rd.e,rd.i);
+  loadReportData();
+}
+
+function loadReportData(){
+  var m = rptIdx + 1;
+  // Show loading state
+  ['r-inc','r-exp','r-bal','r-pct'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.textContent='...';
+  });
+
+  if(APPS_SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
+    var rd=rptData[rptIdx];
+    updateReportUI(rd.i, rd.e);
+    return;
+  }
+
+  fetch(APPS_SCRIPT_URL+'?action=summary&month='+m+'&year=2569')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      updateReportUI(d.income||0, d.expense||0);
+    })
+    .catch(function(){
+      var rd=rptData[rptIdx];
+      updateReportUI(rd.i, rd.e);
+    });
+}
+
+function updateReportUI(inc, exp){
+  var bal=inc-exp;
+  document.getElementById('r-inc').textContent=fmt(inc);
+  document.getElementById('r-exp').textContent=fmt(exp);
+  document.getElementById('r-bal').textContent=fmt(bal);
+  document.getElementById('r-pct').textContent=pct(bal,inc);
+  // Update summary table too
+  var si=document.getElementById('s-inc');if(si)si.textContent=fmt(inc);
+  var se=document.getElementById('s-exp');if(se)se.textContent=fmt(exp);
+  var sb=document.getElementById('s-bal');if(sb)sb.textContent=fmt(bal);
+  var sp=document.getElementById('s-pct');if(sp)sp.textContent=pct(bal,inc);
 }
 
 function getReportMonthLabel(){
@@ -1217,23 +1253,18 @@ function downloadCSV(){
   
   // Try to get real data from Sheets if available
   if(APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbwZuciztYFa93jvnrOP1IHsVqeLop77Ra-NQFQtcJSYB_VsCCeehc0m8PnnJ2c6P_hJ/exec'){
-    var btn = event.target.closest('button');
-    var origText = btn.innerHTML;
-    btn.innerHTML = '<span style="font-size:16px">⏳</span> กำลังโหลด...';
-    btn.disabled = true;
-    
+    var csvBtn = document.getElementById('csv-dl-btn');
+    if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">⏳</span> กำลังโหลด...'; csvBtn.disabled=true; }
     var m = rptIdx + 1;
     fetch(APPS_SCRIPT_URL + '?action=summary&month=' + m + '&year=2569')
       .then(function(r){ return r.json(); })
       .then(function(d){
         buildAndDownloadCSV(monthLabel, d.income||0, d.expense||0);
-        btn.innerHTML = origText;
-        btn.disabled = false;
+        if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV'; csvBtn.disabled=false; }
       })
       .catch(function(){
         buildAndDownloadCSV(monthLabel, rd.i, rd.e);
-        btn.innerHTML = origText;
-        btn.disabled = false;
+        if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV'; csvBtn.disabled=false; }
       });
   } else {
     buildAndDownloadCSV(monthLabel, rd.i, rd.e);
@@ -1245,24 +1276,33 @@ function buildAndDownloadCSV(monthLabel, income, expense){
   var margin = income > 0 ? ((profit/income)*100).toFixed(1) : '0.0';
   var now = new Date();
   var dateStr = now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
-  
+
+  // Get real history data if available
+  var incRows = [['รายรับ','','','']];
+  var expRows = [['รายจ่าย','','','']];
+  if(_histData && _histData.length){
+    var m = rptIdx + 1;
+    _histData.forEach(function(tx){
+      var d=tx.date?new Date(tx.date):null;
+      if(!d||d.getMonth()+1!==m) return;
+      if(tx.type==='income')  incRows.push([tx.date, tx.cat||'', tx.name||'', tx.amount]);
+      if(tx.type==='expense') expRows.push([tx.date, tx.cat||'', tx.name||'', tx.amount]);
+    });
+  }
+
   var rows = [
     ['FinTrack Pro — รายงานประจำเดือน'],
     ['เดือน: ' + monthLabel],
     ['วันที่ออกรายงาน: ' + dateStr],
     [''],
-    ['หัวข้อ', 'จำนวน (บาท)'],
+    ['สรุป','จำนวน (บาท)'],
     ['รายรับรวม', income],
     ['รายจ่ายรวม', expense],
     ['กำไรสุทธิ', profit],
     ['อัตรากำไร', margin + '%'],
     [''],
-    ['หมวดรายจ่าย', 'จำนวน (บาท)', 'สัดส่วน'],
-    ['ต้นทุน/สินค้า', expense > 0 ? Math.round(expense*0.72) : 0, '72%'],
-    ['ขนส่ง', expense > 0 ? Math.round(expense*0.145) : 0, '14.5%'],
-    ['การตลาด', expense > 0 ? Math.round(expense*0.089) : 0, '8.9%'],
-    ['อื่นๆ', expense > 0 ? Math.round(expense*0.046) : 0, '4.6%'],
-  ];
+    ['วันที่','หมวดหมู่','รายการ','จำนวน (บาท)'],
+  ].concat(incRows).concat([['']]).concat(expRows);
   
   var csv = '﻿'; // BOM for Thai characters in Excel
   rows.forEach(function(row){
@@ -1292,7 +1332,9 @@ function buildAndDownloadCSV(monthLabel, income, expense){
 function downloadHTML(){
   var monthLabel = getReportMonthLabel();
   var rd = rptData[rptIdx];
-  var inc = rd.i, exp = rd.e, bal = rd.i - rd.e;
+  var inc = parseFloat((document.getElementById('r-inc')||{}).textContent.replace(/[^0-9.]/g,''))||rd.i;
+  var exp = parseFloat((document.getElementById('r-exp')||{}).textContent.replace(/[^0-9.]/g,''))||rd.e;
+  var bal = inc - exp;
   var margin = inc > 0 ? ((bal/inc)*100).toFixed(1) : '0.0';
   var now = new Date();
   var dateStr = now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
@@ -1387,6 +1429,7 @@ var today=new Date();
 document.getElementById('hdr-date').textContent='วันนี้ '+today.getDate()+' เมษายน 2569';
 buildBars('bar-chart',barData);
 loadSummary();
+loadReportData();
 </script>
 
 <script>

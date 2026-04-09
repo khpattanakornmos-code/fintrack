@@ -1370,8 +1370,7 @@ function buildAndDownloadCSV(monthLabel, income, expense){
   rows.forEach(function(row){
     csv += row.map(function(cell){
       var s = String(cell);
-      if(s.includes(',') || s.includes('"') || s.includes('
-')) s = '"' + s.replace(/"/g,'""') + '"';
+      if(s.includes(',') || s.includes('"') || s.includes('\\n')) s = '"' + s.replace(/"/g,'""') + '"';
       return s;
     }).join(',') + '
 ';
@@ -1498,21 +1497,29 @@ setTimeout(function(){ loadHistory(true); }, 500);
 
 <script>
 (function(){
-  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isAndroid=/android/i.test(navigator.userAgent);
-  var isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
-  if((isIOS||isAndroid)&&!isStandalone&&!sessionStorage.getItem('hint')){
-    setTimeout(function(){
-      var d=document.createElement('div');
-      d.style.cssText='position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:rgba(226,185,126,0.97);color:#1a1a1a;padding:12px 18px;border-radius:14px;font-size:13px;font-family:Prompt,sans-serif;text-align:center;z-index:9999;max-width:290px;line-height:1.5;';
-      d.innerHTML=isIOS
-        ?'<b>เพื่อซ่อน URL bar</b><br>กด Share &#8599; แล้วเลือก<br>"Add to Home Screen"<div style="margin-top:8px;font-size:11px;opacity:0.7;cursor:pointer;" onclick="this.parentNode.remove();sessionStorage.setItem('hint',1)">กดเพื่อปิด</div>'
-        :'<b>เพื่อซ่อน URL bar</b><br>กด &#8942; แล้วเลือก<br>"Add to Home screen"<div style="margin-top:8px;font-size:11px;opacity:0.7;cursor:pointer;" onclick="this.parentNode.remove();sessionStorage.setItem('hint',1)">กดเพื่อปิด</div>';
-      document.body.appendChild(d);
-      setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},7000);
-      sessionStorage.setItem('hint',1);
-    },2500);
-  }
+  try {
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isAndroid = /android/i.test(navigator.userAgent);
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if((isIOS || isAndroid) && !isStandalone && !sessionStorage.getItem('pwa_hint')){
+      setTimeout(function(){
+        var d = document.createElement('div');
+        d.style.cssText = 'position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:rgba(226,185,126,0.97);color:#1a1a1a;padding:12px 18px;border-radius:14px;font-size:13px;font-family:Prompt,Sarabun,sans-serif;text-align:center;z-index:9999;max-width:290px;line-height:1.5;';
+        var msg = isIOS
+          ? '<b>เพื่อซ่อน URL bar</b><br>กด Share แล้วเลือก Add to Home Screen'
+          : '<b>เพื่อซ่อน URL bar</b><br>กด เมนู แล้วเลือก Add to Home screen';
+        var closeBtn = '<br><span style="font-size:11px;opacity:0.7;cursor:pointer;" id="pwa-close">กดเพื่อปิด</span>';
+        d.innerHTML = msg + closeBtn;
+        document.body.appendChild(d);
+        document.getElementById('pwa-close').addEventListener('click', function(){
+          if(d.parentNode) d.parentNode.removeChild(d);
+          sessionStorage.setItem('pwa_hint','1');
+        });
+        setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 7000);
+        sessionStorage.setItem('pwa_hint','1');
+      }, 3000);
+    }
+  } catch(e) {}
 })();
 </script>
 </body>

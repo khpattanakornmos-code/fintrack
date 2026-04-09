@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0D1F1A">
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #0D1F1A;
+  }
+</style>
+<title>FinTrack Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
+:root {
+  --bg-grad: linear-gradient(145deg, #0D1F1A 0%, #0A1628 40%, #1A0D2E 100%);
+  --glass: rgba(255,255,255,0.07);
+  --glass-2: rgba(255,255,255,0.11);
+  --glass-border: rgba(255,255,255,0.14);
+  --glass-border-2: rgba(255,255,255,0.22);
+  --green: #3DDBA8;
+  --green-glow: rgba(61,219,168,0.18);
+  --green-pale: rgba(61,219,168,0.10);
+  --red: #FF7B6B;
+  --red-pale: rgba(255,123,107,0.10);
+  --gold: #E2B97E;
+  --gold-pale: rgba(226,185,126,0.12);
+  --gold-glow: rgba(226,185,126,0.22);
+  --blue: #7EB8FF;
+  --blue-pale: rgba(126,184,255,0.10);
+  --white: #FFFFFF;
+  --text-1: rgba(255,255,255,0.95);
+  --text-2: rgba(255,255,255,0.65);
+  --text-3: rgba(255,255,255,0.38);
+  --radius: 22px;
+  --radius-sm: 16px;
+  --radius-xs: 12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:'Prompt',sans-serif}
+
+.app{
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  width:100%; height:100%;
+  overflow:hidden;
+  background:var(--bg-grad);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Ambient orbs */
+.app::before{content:'';position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(61,219,168,0.18) 0%,transparent 70%);top:-80px;right:-60px;pointer-events:none;z-index:0}
+.app::after{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(126,80,255,0.15) 0%,transparent 70%);bottom:100px;left:-80px;pointer-events:none;z-index:0}
+
+.status-bar{height:env(safe-area-inset-top,0px);position:relative;z-index:10}
+
+/* Header */
+.header{padding:14px 22px 22px;flex-shrink:0;position:relative;z-index:10;border-bottom:1px solid var(--glass-border)}
+.header::before{content:'';position:absolute;inset:0;background:rgba(13,31,26,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:-1}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.app-name{font-size:22px;font-weight:600;color:var(--white);letter-spacing:-0.01em}
+.app-date{font-size:11px;color:var(--text-3);margin-top:2px;font-weight:300}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-pale);border:1.5px solid rgba(226,185,126,0.4);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gold);font-weight:500}
+.hero-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.hcard{background:var(--glass);border-radius:var(--radius-xs);padding:12px;border:1px solid var(--glass-border);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hcard-label{font-size:9px;color:var(--text-3);margin-bottom:5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:400}
+.hcard-value{font-size:15px;font-weight:500;letter-spacing:-0.01em}
+.hcard-value.inc{color:var(--green)}
+.hcard-value.exp{color:var(--red)}
+.hcard-value.bal{color:var(--white)}
+.hcard-trend{font-size:9px;color:var(--text-3);margin-top:3px;font-weight:300}
+
+/* Nav */
+.nav{display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px);position:relative;z-index:10;border-top:1px solid var(--glass-border)}
+.nav::before{content:'';position:absolute;inset:0;background:rgba(10,22,40,0.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:-1}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;cursor:pointer;gap:4px;position:relative}
+.nav-item .nav-ico{font-size:20px;line-height:1}
+.nav-item .nav-lbl{font-size:10px;color:var(--text-3);font-weight:300}
+.nav-item.active .nav-lbl{color:var(--gold);font-weight:500}
+.nav-item.active::after{content:'';position:absolute;bottom:0;left:30%;right:30%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:2px 2px 0 0}
+
+/* Pages */
+.pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:5}
+.page{display:none;padding:16px;min-height:100%}
+.page.active{display:block}
+
+.sec-title{font-size:10px;font-weight:500;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
+
+/* Glass card */
+.card{background:var(--glass);border-radius:var(--radius);padding:18px;margin-bottom:12px;border:1px solid var(--glass-border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-border-2),transparent)}
+.card-title{font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:14px;letter-spacing:0.01em}
+
+/* Metrics */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.metric{background:var(--glass);border-radius:var(--radius-sm);padding:14px 16px;border:1px solid var(--glass-border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.metric.span2{grid-column:span 2}
+.metric.green-bg{background:var(--green-pale);border-color:rgba(61,219,168,0.2)}
+.metric.red-bg{background:var(--red-pale);border-color:rgba(255,123,107,0.2)}
+.metric.blue-bg{background:var(--blue-pale);border-color:rgba(126,184,255,0.2)}
+.metric.gold-bg{background:var(--gold-pale);border-color:rgba(226,185,126,0.2)}
+.metric-label{font-size:11px;color:var(--text-3);margin-bottom:5px;font-weight:300}
+.metric.green-bg .metric-label{color:var(--green)}
+.metric.red-bg .metric-label{color:var(--red)}
+.metric.blue-bg .metric-label{color:var(--blue)}
+.metric.gold-bg .metric-label{color:var(--gold)}
+.metric-value{font-size:22px;font-weight:500;color:var(--white);letter-spacing:-0.02em}
+.metric.green-bg .metric-value{color:var(--green)}
+.metric.red-bg .metric-value{color:var(--red)}
+.metric.blue-bg .metric-value{color:var(--blue)}
+.metric.gold-bg .metric-value{color:var(--gold)}
+.metric-sub{font-size:10px;color:var(--text-3);margin-top:3px}
+.profit-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:10px;overflow:hidden}
+.profit-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:2px}
+
+/* Bar chart */
+.bar-group{display:flex;gap:4px;align-items:flex-end;height:80px;margin-bottom:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.bar-pair{display:flex;gap:2px;align-items:flex-end;width:100%}
+.bar{border-radius:4px 4px 0 0;flex:1;min-height:3px}
+.bar.inc-bar{background:linear-gradient(180deg,var(--green),rgba(61,219,168,0.4))}
+.bar.exp-bar{background:linear-gradient(180deg,var(--red),rgba(255,123,107,0.4))}
+.bar-label{font-size:9px;color:var(--text-3)}
+.chart-legend{display:flex;gap:14px;font-size:11px;color:var(--text-3);margin-bottom:12px}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* Cat bars */
+.cat-item{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.cat-name{font-size:12px;color:var(--text-2);width:72px;flex-shrink:0;font-weight:300}
+.cat-track{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.cat-fill{height:100%;border-radius:3px}
+.cat-val{font-size:12px;font-weight:500;width:55px;text-align:right;flex-shrink:0}
+
+/* Transactions */
+.tx-list{display:flex;flex-direction:column;gap:8px}
+.tx{display:flex;align-items:center;gap:12px;background:var(--glass);border-radius:var(--radius-xs);padding:12px 14px;border:1px solid var(--glass-border)}
+.tx-ico{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tx-ico.g{background:var(--green-pale);border:1px solid rgba(61,219,168,0.2)}
+.tx-ico.r{background:var(--red-pale);border:1px solid rgba(255,123,107,0.2)}
+.tx-body{flex:1;min-width:0}
+.tx-name{font-size:13px;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx-meta{font-size:11px;color:var(--text-3);margin-top:2px;font-weight:300}
+.tx-amount{font-size:14px;font-weight:500}
+.tx-amount.g{color:var(--green)}
+.tx-amount.r{color:var(--red)}
+
+/* Forms */
+.form-group{margin-bottom:16px}
+.form-label{font-size:10px;font-weight:500;color:var(--text-3);margin-bottom:7px;display:block;letter-spacing:0.08em;text-transform:uppercase}
+.form-input{width:100%;padding:13px 16px;border:1px solid var(--glass-border);border-radius:var(--radius-xs);font-size:15px;font-family:'Prompt';background:var(--glass);color:var(--text-1);transition:border-color 0.2s;-webkit-appearance:none;backdrop-filter:blur(8px)}
+.form-input:focus{outline:none;border-color:rgba(226,185,126,0.5);background:var(--glass-2)}
+.form-input::placeholder{color:var(--text-3)}
+.form-input.amount-input{font-size:28px;font-weight:500;text-align:center;color:var(--green);border-color:rgba(61,219,168,0.2);background:var(--green-pale);letter-spacing:-0.02em}
+.form-input.amount-input.red{color:var(--red);border-color:rgba(255,123,107,0.2);background:var(--red-pale)}
+
+/* Tags */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:8px 16px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-3);transition:all 0.15s;font-family:'Prompt';backdrop-filter:blur(8px)}
+.tag.active{background:var(--gold-pale);color:var(--gold);border-color:rgba(226,185,126,0.35);font-weight:500}
+.tag.active.red{background:var(--red-pale);color:var(--red);border-color:rgba(255,123,107,0.35)}
+
+/* Buttons */
+.btn{width:100%;padding:16px;border-radius:var(--radius-xs);border:none;font-size:15px;font-family:'Prompt';font-weight:500;cursor:pointer;transition:all 0.15s}
+.btn:active{transform:scale(0.98);opacity:0.9}
+.btn-green{background:linear-gradient(135deg,rgba(61,219,168,0.8),rgba(61,219,168,0.5));color:var(--white);border:1px solid rgba(61,219,168,0.3)}
+.btn-red{background:linear-gradient(135deg,rgba(255,123,107,0.8),rgba(255,123,107,0.5));color:var(--white);border:1px solid rgba(255,123,107,0.3)}
+.btn-gold{background:linear-gradient(135deg,rgba(226,185,126,0.8),rgba(226,185,126,0.5));color:var(--white);border:1px solid rgba(226,185,126,0.3)}
+
+/* Toast */
+.toast{display:none;align-items:center;gap:10px;padding:13px 16px;border-radius:var(--radius-xs);margin-bottom:14px;backdrop-filter:blur(12px)}
+.toast.g{background:var(--green-pale);border:1px solid rgba(61,219,168,0.25)}
+.toast.r{background:var(--red-pale);border:1px solid rgba(255,123,107,0.25)}
+.toast-text{font-size:13px;font-weight:500}
+.toast.g .toast-text{color:var(--green)}
+.toast.r .toast-text{color:var(--red)}
+
+/* Month nav */
+.month-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--glass);border-radius:var(--radius-sm);margin-bottom:12px;border:1px solid var(--glass-border);backdrop-filter:blur(12px)}
+.month-btn{width:32px;height:32px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);cursor:pointer;font-size:18px;color:var(--text-2);display:flex;align-items:center;justify-content:center}
+.month-label{font-size:15px;font-weight:500;color:var(--white)}
+
+/* Tabs */
+.tab-row{display:flex;background:var(--glass);border-radius:var(--radius-xs);padding:3px;gap:3px;margin-bottom:16px;border:1px solid var(--glass-border)}
+.tab-btn{flex:1;padding:9px;border-radius:10px;border:none;font-size:12px;font-family:'Prompt';cursor:pointer;background:none;color:var(--text-3);transition:all 0.2s}
+.tab-btn.active{background:rgba(226,185,126,0.15);color:var(--gold);font-weight:500;border:1px solid rgba(226,185,126,0.2)}
+
+/* Mode switch */
+.mode-switch{display:flex;background:var(--glass);border-radius:var(--radius-xs);padding:3px;gap:3px;margin-bottom:18px;border:1px solid var(--glass-border)}
+.mode-btn{flex:1;padding:10px;border-radius:10px;border:none;font-size:13px;font-family:'Prompt';cursor:pointer;background:none;color:var(--text-3)}
+.mode-btn.active{background:var(--glass-2);font-weight:500;border:1px solid var(--glass-border)}
+.mode-btn.active.green{color:var(--green)}
+.mode-btn.active.red{color:var(--red)}
+
+/* Upload */
+.upload-box{border:1px dashed var(--glass-border);border-radius:var(--radius-xs);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--glass)}
+.upload-box:hover{border-color:rgba(226,185,126,0.4);background:var(--gold-pale)}
+.upload-ico{font-size:28px;margin-bottom:8px}
+.upload-text{font-size:13px;color:var(--text-3);font-weight:300}
+.upload-hint{font-size:11px;color:var(--gold);margin-top:4px}
+
+/* Slip */
+.slip-detected{background:var(--green-pale);border-radius:var(--radius-xs);border:1px solid rgba(61,219,168,0.2);padding:16px;display:none;margin-bottom:14px}
+.slip-bank{font-size:11px;color:var(--text-3);margin-bottom:6px}
+.slip-amount-detected{font-size:28px;font-weight:500;color:var(--green);letter-spacing:-0.02em}
+.slip-time{font-size:11px;color:var(--text-3);margin-top:4px}
+.slip-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.slip-label{font-size:11px;color:var(--green);font-weight:500}
+.slip-reset{font-size:11px;color:var(--text-3);cursor:pointer;text-decoration:underline}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:12px}
+.search-wrap::before{content:'🔍';position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;z-index:1}
+.search-wrap input{width:100%;padding:12px 16px 12px 40px;border:1px solid var(--glass-border);border-radius:var(--radius-xs);font-size:14px;font-family:'Prompt';background:var(--glass);color:var(--text-1);backdrop-filter:blur(8px)}
+.search-wrap input::placeholder{color:var(--text-3)}
+.search-wrap input:focus{outline:none;border-color:rgba(226,185,126,0.4)}
+.filter-row{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.filter-chip{padding:7px 16px;border-radius:20px;font-size:11px;white-space:nowrap;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-3);flex-shrink:0;font-family:'Prompt'}
+.filter-chip.active{background:var(--gold-pale);color:var(--gold);border-color:rgba(226,185,126,0.35);font-weight:500}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500}
+.badge-g{background:var(--green-pale);color:var(--green)}
+.badge-r{background:var(--red-pale);color:var(--red)}
+.saving{display:none;font-size:12px;color:var(--text-3);text-align:center;margin-top:8px}
+select.form-input option{background:#0D1F1A;color:var(--text-1)}
+
+
+/* ── Full screen mobile fix ── */
+.pages {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* ── Responsive ── */
+@media (min-width: 600px) {
+  .app { max-width: 480px; margin: 0 auto; }
+}
+@media (max-width: 380px) {
+  .hcard-value { font-size: 13px; }
+  .hcard-label { font-size: 8px; }
+  .hero-cards { gap: 7px; }
+  .header { padding: 10px 16px 16px; }
+  .page { padding: 12px; }
+  .metric-value { font-size: 18px; }
+  .nav-item .nav-ico { font-size: 18px; }
+  .nav-item .nav-lbl { font-size: 9px; }
+  .form-input.amount-input { font-size: 22px; }
+  .card { padding: 14px; }
+}
+@media (max-width: 320px) {
+  .hero-cards { grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+  .hcard { padding: 8px; }
+  .hcard-value { font-size: 12px; }
+  .metric-value { font-size: 16px; }
+}
+html {
+  width: 100%;
+  height: 100%;
+  height: -webkit-fill-available;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+  height: -webkit-fill-available;
+  overflow: hidden;
+  touch-action: manipulation;
+  background: #0D1F1A;
+}
+* { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on focus */
+.form-input { font-size: 16px; }
+.form-input.amount-input { font-size: 26px !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="status-bar"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="app-name">FinTrack Pro</div>
+        <div class="app-date" id="hdr-date">วันนี้ 8 เมษายน 2569</div>
+      </div>
+      <div class="avatar">คณ</div>
+    </div>
+    <div class="hero-cards">
+      <div class="hcard">
+        <div class="hcard-label">รายรับ</div>
+        <div class="hcard-value inc" id="h-inc">฿85,200</div>
+        <div class="hcard-trend">▲ 12% จากเดือนก่อน</div>
+      </div>
+      <div class="hcard">
+        <div class="hcard-label">รายจ่าย</div>
+        <div class="hcard-value exp" id="h-exp">฿42,800</div>
+        <div class="hcard-trend">▼ 3% จากเดือนก่อน</div>
+      </div>
+      <div class="hcard">
+        <div class="hcard-label">กำไร</div>
+        <div class="hcard-value bal" id="h-bal">฿42,400</div>
+        <div class="hcard-trend">สุทธิเดือนนี้</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pages -->
+  <div class="pages">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="pg-dash">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="dashTab('month',this)">เดือนนี้</button>
+        <button class="tab-btn" onclick="dashTab('year',this)">ปีนี้</button>
+      </div>
+
+      <div id="dv-month">
+        <div class="metric-grid">
+          <div class="metric green-bg">
+            <div class="metric-label">รายรับ</div>
+            <div class="metric-value">฿85,200</div>
+            <div class="metric-sub">เมษายน 2569</div>
+          </div>
+          <div class="metric red-bg">
+            <div class="metric-label">รายจ่าย</div>
+            <div class="metric-value">฿42,800</div>
+            <div class="metric-sub">เมษายน 2569</div>
+          </div>
+          <div class="metric blue-bg span2">
+            <div class="metric-label">กำไรสุทธิ</div>
+            <div class="metric-value">฿42,400</div>
+            <div class="profit-bar"><div class="profit-fill" style="width:50%"></div></div>
+            <div class="metric-sub" style="margin-top:4px">อัตรากำไร 49.8%</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">รายรับ vs รายจ่าย (6 เดือน)</div>
+          <div class="chart-legend">
+            <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#5DCAA5"></span>รายรับ</span>
+            <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#F0997B"></span>รายจ่าย</span>
+          </div>
+          <div class="bar-group" id="bar-chart">
+            <!-- Generated by JS -->
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">รายจ่ายตามหมวดหมู่</div>
+          <div class="cat-item">
+            <div class="cat-name">ต้นทุน</div>
+            <div class="cat-track"><div class="cat-fill" style="width:72%;background:#C84B30"></div></div>
+            <div class="cat-val" style="color:#7B2D1E">฿30,800</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-name">ขนส่ง</div>
+            <div class="cat-track"><div class="cat-fill" style="width:28%;background:#EF9F27"></div></div>
+            <div class="cat-val" style="color:#7A5010">฿6,200</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-name">การตลาด</div>
+            <div class="cat-track"><div class="cat-fill" style="width:14%;background:#534AB7"></div></div>
+            <div class="cat-val" style="color:#3C3489">฿3,800</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-name">อื่นๆ</div>
+            <div class="cat-track"><div class="cat-fill" style="width:9%;background:#888780"></div></div>
+            <div class="cat-val" style="color:#444441">฿2,000</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">รายการล่าสุด</div>
+          <div class="tx-list">
+            <div class="tx"><div class="tx-ico g">💳</div><div class="tx-body"><div class="tx-name">โอนเงิน คุณสมชาย</div><div class="tx-meta">โอนตรง · 7 เม.ย.</div></div><div class="tx-amount g">+฿12,500</div></div>
+            <div class="tx"><div class="tx-ico r">📦</div><div class="tx-body"><div class="tx-name">ซื้อสต็อกสินค้า</div><div class="tx-meta">ต้นทุน · 6 เม.ย.</div></div><div class="tx-amount r">-฿8,200</div></div>
+            <div class="tx"><div class="tx-ico g">🛍️</div><div class="tx-body"><div class="tx-name">ยอดขาย Shopee</div><div class="tx-meta">Shopee · 5 เม.ย.</div></div><div class="tx-amount g">+฿9,200</div></div>
+            <div class="tx"><div class="tx-ico r">🚚</div><div class="tx-body"><div class="tx-name">ค่าขนส่ง Kerry</div><div class="tx-meta">ขนส่ง · 5 เม.ย.</div></div><div class="tx-amount r">-฿2,100</div></div>
+            <div class="tx"><div class="tx-ico g">📘</div><div class="tx-body"><div class="tx-name">ขาย Facebook Live</div><div class="tx-meta">Facebook · 4 เม.ย.</div></div><div class="tx-amount g">+฿18,500</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dv-year" style="display:none">
+        <div class="metric-grid" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="metric green-bg"><div class="metric-label">รายรับสะสม</div><div class="metric-value" style="font-size:17px">฿724K</div><div class="metric-sub">ปี 2569</div></div>
+          <div class="metric red-bg"><div class="metric-label">รายจ่ายสะสม</div><div class="metric-value" style="font-size:17px">฿352K</div><div class="metric-sub">ปี 2569</div></div>
+          <div class="metric blue-bg"><div class="metric-label">กำไรสะสม</div><div class="metric-value" style="font-size:17px">฿372K</div><div class="metric-sub">ปี 2569</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">แนวโน้มรายรับทั้งปี</div>
+          <div class="chart-legend">
+            <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#5DCAA5"></span>รายรับ</span>
+            <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#F0997B"></span>รายจ่าย</span>
+          </div>
+          <div class="bar-group" id="bar-chart-yr"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">รายรับแยกตามช่องทาง</div>
+          <div class="cat-item"><div class="cat-name">Shopee</div><div class="cat-track"><div class="cat-fill" style="width:85%;background:#5DCAA5"></div></div><div class="cat-val" style="color:#0A5940">฿215K</div></div>
+          <div class="cat-item"><div class="cat-name">Facebook</div><div class="cat-track"><div class="cat-fill" style="width:70%;background:#85B7EB"></div></div><div class="cat-val" style="color:#1A6FA8">฿180K</div></div>
+          <div class="cat-item"><div class="cat-name">Lazada</div><div class="cat-track"><div class="cat-fill" style="width:55%;background:#FAC775"></div></div><div class="cat-val" style="color:#7A5010">฿140K</div></div>
+          <div class="cat-item"><div class="cat-name">โอนตรง</div><div class="cat-track"><div class="cat-fill" style="width:38%;background:#AFA9EC"></div></div><div class="cat-val" style="color:#3C3489">฿94K</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INCOME -->
+    <div class="page" id="pg-inc">
+      <div class="toast g" id="t-inc" style="display:none"><span>✅</span><span class="toast-text" id="t-inc-msg">บันทึกรายรับสำเร็จ!</span></div>
+      <div class="mode-switch">
+        <button class="mode-btn active green" onclick="incMode('key',this)">⌨️ กรอกด้วยมือ</button>
+        <button class="mode-btn" onclick="incMode('slip',this)">📷 อัปโหลดสลิป</button>
+      </div>
+
+      <div id="iv-key">
+        <div class="card">
+          <div class="form-group">
+            <label class="form-label">จำนวนเงิน (บาท)</label>
+            <input type="number" class="form-input amount-input" id="inc-amt" placeholder="0.00" inputmode="decimal" oninput="previewAmt('inc')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ช่องทาง / แหล่งที่มา</label>
+            <div class="tag-wrap" id="inc-ch-tags">
+              <div class="tag active" onclick="pickTag(this,'inc-ch')">🛍️ Shopee</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">📦 Lazada</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">📘 Facebook</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">🎵 TikTok</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">💳 โอนตรง</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">🏪 หน้าร้าน</div>
+              <div class="tag" onclick="pickTag(this,'inc-ch')">📝 อื่นๆ</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ชื่อลูกค้า / ออเดอร์</label>
+            <input type="text" class="form-input" id="inc-cust" placeholder="เช่น คุณสมชาย สั่ง 3 ชิ้น">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ประเภทสินค้า</label>
+            <input type="text" class="form-input" id="inc-prod" placeholder="เช่น เสื้อผ้า, อาหาร">
+          </div>
+          <div class="form-group">
+            <label class="form-label">วันที่รับเงิน</label>
+            <input type="date" class="form-input" id="inc-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">หมายเหตุ</label>
+            <input type="text" class="form-input" id="inc-note" placeholder="รายละเอียดเพิ่มเติม...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">มีสลิป?</label>
+            <div class="tag-wrap">
+              <div class="tag active" onclick="pickTag(this,'inc-slip')">✅ ใช่</div>
+              <div class="tag" onclick="pickTag(this,'inc-slip')">❌ ไม่มี</div>
+            </div>
+          </div>
+          <button class="btn btn-green" onclick="saveInc()">บันทึกรายรับ</button>
+          <div class="saving" id="saving-inc">กำลังบันทึก...</div>
+        </div>
+      </div>
+
+      <div id="iv-slip" style="display:none">
+        <div class="card">
+          <div class="upload-box" id="slip-box" onclick="readSlip()">
+            <div class="upload-ico">📄</div>
+            <div class="upload-text">แตะเพื่อเลือกรูปสลิปโอนเงิน</div>
+            <div class="upload-hint">ระบบจะอ่านยอดเงินให้อัตโนมัติ</div>
+          </div>
+          <div class="slip-detected" id="slip-detected">
+            <div class="slip-bank">🏦 ธนาคารกสิกรไทย (KBank)</div>
+            <div style="font-size:11px;color:#6B6B6B">ยอดโอนเงิน</div>
+            <div class="slip-amount-detected">฿ 12,500.00</div>
+            <div class="slip-time">8 เมษายน 2569 · 14:32 น.</div>
+            <div class="slip-actions">
+              <div><div class="slip-label">ยอดที่อ่านได้ ✓</div></div>
+              <span class="slip-reset" onclick="resetSlip()">เปลี่ยนสลิป</span>
+            </div>
+          </div>
+          <div id="slip-form" style="display:none;margin-top:14px">
+            <div class="form-group">
+              <label class="form-label">แหล่งที่มา</label>
+              <div class="tag-wrap">
+                <div class="tag active" onclick="pickTag(this,'slip-src')">💳 โอนตรง</div>
+                <div class="tag" onclick="pickTag(this,'slip-src')">🛍️ Shopee</div>
+                <div class="tag" onclick="pickTag(this,'slip-src')">📘 Facebook</div>
+                <div class="tag" onclick="pickTag(this,'slip-src')">📝 อื่นๆ</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">ยอดเงิน (แก้ไขได้)</label>
+              <input type="number" class="form-input amount-input" value="12500">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ชื่อผู้โอน / หมายเหตุ</label>
+              <input type="text" class="form-input" placeholder="สมชาย ใจดี">
+            </div>
+            <div class="form-group">
+              <label class="form-label">วันที่</label>
+              <input type="date" class="form-input" id="slip-date">
+            </div>
+            <button class="btn btn-green" onclick="saveInc()">บันทึกรายรับจากสลิป</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPENSE -->
+    <div class="page" id="pg-exp">
+      <div class="toast r" id="t-exp" style="display:none"><span>🧾</span><span class="toast-text">บันทึกรายจ่ายสำเร็จ!</span></div>
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">จำนวนเงิน (บาท)</label>
+          <input type="number" class="form-input amount-input red" id="exp-amt" placeholder="0.00" inputmode="decimal">
+        </div>
+        <div class="form-group">
+          <label class="form-label">หมวดหมู่รายจ่าย</label>
+          <div class="tag-wrap">
+            <div class="tag active red" onclick="pickTagRed(this,'exp-cat')">📦 ต้นทุน/สินค้า</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">🚚 ขนส่ง</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">📣 การตลาด</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">🏪 ค่าเช่า</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">💡 สาธารณูปโภค</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">👩‍💼 ค่าจ้าง</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">🖥️ อุปกรณ์</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-cat')">📝 อื่นๆ</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">รายละเอียด</label>
+          <input type="text" class="form-input" id="exp-detail" placeholder="เช่น ซื้อสต็อกเสื้อ 100 ตัว">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ชื่อผู้รับเงิน / Supplier</label>
+          <input type="text" class="form-input" id="exp-payee" placeholder="เช่น Supplier A, Kerry Express">
+        </div>
+        <div class="form-group">
+          <label class="form-label">วิธีชำระเงิน</label>
+          <div class="tag-wrap">
+            <div class="tag active red" onclick="pickTagRed(this,'exp-pay')">💳 โอนเงิน</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-pay')">💵 เงินสด</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-pay')">💴 เครดิต</div>
+            <div class="tag" onclick="pickTagRed(this,'exp-pay')">📲 Promptpay</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">วันที่จ่าย</label>
+          <input type="date" class="form-input" id="exp-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">หมายเหตุ</label>
+          <input type="text" class="form-input" id="exp-note" placeholder="รายละเอียดเพิ่มเติม...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">แนบใบเสร็จ (ถ้ามี)</label>
+          <div class="upload-box" style="padding:12px">
+            <div class="upload-ico" style="font-size:20px">🧾</div>
+            <div class="upload-text">แตะเพื่ออัปโหลดใบเสร็จ</div>
+          </div>
+        </div>
+        <button class="btn btn-red" onclick="saveExp()">บันทึกรายจ่าย</button>
+        <div class="saving" id="saving-exp">กำลังบันทึก...</div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="page" id="pg-hist">
+      <div class="search-wrap">
+        <input type="text" placeholder="ค้นหารายการ..." oninput="filterHistory(this.value)">
+      </div>
+      <div class="filter-row">
+        <div class="filter-chip active" onclick="filterChip('all',this)">ทั้งหมด</div>
+        <div class="filter-chip" onclick="filterChip('inc',this)">รายรับ</div>
+        <div class="filter-chip" onclick="filterChip('exp',this)">รายจ่าย</div>
+        <div class="filter-chip" onclick="filterChip('shopee',this)">Shopee</div>
+        <div class="filter-chip" onclick="filterChip('facebook',this)">Facebook</div>
+        <div class="filter-chip" onclick="filterChip('cost',this)">ต้นทุน</div>
+      </div>
+      <div class="sec-title">เมษายน 2569</div>
+      <div class="card" id="hist-list">
+        <div class="tx" data-type="inc" data-cat="โอนตรง" style="margin-bottom:8px">
+          <div class="tx-ico g">💳</div>
+          <div class="tx-body"><div class="tx-name">โอนเงิน คุณสมชาย</div><div class="tx-meta"><span class="badge badge-g">รายรับ</span> โอนตรง · 7 เม.ย.</div></div>
+          <div class="tx-amount g">+฿12,500</div>
+        </div>
+        <div class="tx" data-type="exp" data-cat="ต้นทุน" style="margin-bottom:8px">
+          <div class="tx-ico r">📦</div>
+          <div class="tx-body"><div class="tx-name">ซื้อสต็อกสินค้า Supplier A</div><div class="tx-meta"><span class="badge badge-r">รายจ่าย</span> ต้นทุน · 6 เม.ย.</div></div>
+          <div class="tx-amount r">-฿8,200</div>
+        </div>
+        <div class="tx" data-type="inc" data-cat="shopee" style="margin-bottom:8px">
+          <div class="tx-ico g">🛍️</div>
+          <div class="tx-body"><div class="tx-name">ยอดขาย Shopee ประจำวัน</div><div class="tx-meta"><span class="badge badge-g">รายรับ</span> Shopee · 5 เม.ย.</div></div>
+          <div class="tx-amount g">+฿9,200</div>
+        </div>
+        <div class="tx" data-type="exp" data-cat="ขนส่ง" style="margin-bottom:8px">
+          <div class="tx-ico r">🚚</div>
+          <div class="tx-body"><div class="tx-name">ค่าขนส่ง Kerry Express</div><div class="tx-meta"><span class="badge badge-r">รายจ่าย</span> ขนส่ง · 5 เม.ย.</div></div>
+          <div class="tx-amount r">-฿2,100</div>
+        </div>
+        <div class="tx" data-type="inc" data-cat="facebook" style="margin-bottom:8px">
+          <div class="tx-ico g">📘</div>
+          <div class="tx-body"><div class="tx-name">ขาย Facebook Live</div><div class="tx-meta"><span class="badge badge-g">รายรับ</span> Facebook · 4 เม.ย.</div></div>
+          <div class="tx-amount g">+฿18,500</div>
+        </div>
+        <div class="tx" data-type="exp" data-cat="การตลาด">
+          <div class="tx-ico r">📣</div>
+          <div class="tx-body"><div class="tx-name">ค่าโฆษณา Facebook Ads</div><div class="tx-meta"><span class="badge badge-r">รายจ่าย</span> การตลาด · 3 เม.ย.</div></div>
+          <div class="tx-amount r">-฿3,800</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="page" id="pg-rpt">
+      <div class="month-nav">
+        <button class="month-btn" onclick="changeMonth(-1)">&#8249;</button>
+        <span class="month-label" id="rpt-month">เมษายน 2569</span>
+        <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
+      </div>
+      <div class="metric-grid">
+        <div class="metric green-bg"><div class="metric-label">รายรับรวม</div><div class="metric-value" id="r-inc">฿85,200</div></div>
+        <div class="metric red-bg"><div class="metric-label">รายจ่ายรวม</div><div class="metric-value" id="r-exp">฿42,800</div></div>
+        <div class="metric blue-bg"><div class="metric-label">กำไรสุทธิ</div><div class="metric-value" id="r-bal">฿42,400</div></div>
+        <div class="metric gold-bg"><div class="metric-label">อัตรากำไร</div><div class="metric-value" id="r-pct">49.8%</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">รายการทั้งหมด</div>
+        <div class="tx-list">
+          <div class="tx"><div class="tx-ico g">💳</div><div class="tx-body"><div class="tx-name">โอนเงิน คุณสมชาย</div><div class="tx-meta">โอนตรง · 7 เม.ย.</div></div><div class="tx-amount g">+฿12,500</div></div>
+          <div class="tx"><div class="tx-ico r">📦</div><div class="tx-body"><div class="tx-name">ซื้อสต็อก Supplier A</div><div class="tx-meta">ต้นทุน · 6 เม.ย.</div></div><div class="tx-amount r">-฿8,200</div></div>
+          <div class="tx"><div class="tx-ico g">🛍️</div><div class="tx-body"><div class="tx-name">ยอดขาย Shopee</div><div class="tx-meta">Shopee · 5 เม.ย.</div></div><div class="tx-amount g">+฿9,200</div></div>
+          <div class="tx"><div class="tx-ico r">🚚</div><div class="tx-body"><div class="tx-name">ค่าขนส่ง Kerry</div><div class="tx-meta">ขนส่ง · 5 เม.ย.</div></div><div class="tx-amount r">-฿2,100</div></div>
+          <div class="tx"><div class="tx-ico g">📘</div><div class="tx-body"><div class="tx-name">ขาย Facebook Live</div><div class="tx-meta">Facebook · 4 เม.ย.</div></div><div class="tx-amount g">+฿18,500</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">สรุปรายจ่ายตามหมวดหมู่</div>
+        <div class="cat-item"><div class="cat-name">ต้นทุน</div><div class="cat-track"><div class="cat-fill" style="width:72%;background:#C84B30"></div></div><div class="cat-val" style="color:#7B2D1E">฿30,800</div></div>
+        <div class="cat-item"><div class="cat-name">ขนส่ง</div><div class="cat-track"><div class="cat-fill" style="width:28%;background:#EF9F27"></div></div><div class="cat-val" style="color:#7A5010">฿6,200</div></div>
+        <div class="cat-item"><div class="cat-name">การตลาด</div><div class="cat-track"><div class="cat-fill" style="width:14%;background:#534AB7"></div></div><div class="cat-val" style="color:#3C3489">฿3,800</div></div>
+        <div class="cat-item"><div class="cat-name">อื่นๆ</div><div class="cat-track"><div class="cat-fill" style="width:9%;background:#888780"></div></div><div class="cat-val" style="color:#444441">฿2,000</div></div>
+      </div>
+      <button class="btn btn-green" style="margin-bottom:20px">📤 ส่งออก / แชร์รายงาน</button>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="nav">
+    <div class="nav-item active" onclick="goPage('dash',this)"><div class="nav-ico">📊</div><div class="nav-lbl">หน้าหลัก</div></div>
+    <div class="nav-item" onclick="goPage('inc',this)"><div class="nav-ico">💰</div><div class="nav-lbl">รายรับ</div></div>
+    <div class="nav-item" onclick="goPage('exp',this)"><div class="nav-ico">🧾</div><div class="nav-lbl">รายจ่าย</div></div>
+    <div class="nav-item" onclick="goPage('hist',this)"><div class="nav-ico">📜</div><div class="nav-lbl">ประวัติ</div></div>
+    <div class="nav-item" onclick="goPage('rpt',this)"><div class="nav-ico">📋</div><div class="nav-lbl">รายงาน</div></div>
+  </div>
+</div>
+
+<script>
+var barData=[
+  {m:'ต.ค.',i:60000,e:38000},{m:'พ.ย.',i:72000,e:41000},
+  {m:'ธ.ค.',i:95000,e:55000},{m:'ม.ค.',i:68000,e:39000},
+  {m:'ก.พ.',i:77000,e:44000},{m:'มี.ค.',i:85200,e:42800}
+];
+var yrData=[
+  {m:'ม.ค.',i:280000,e:148000},{m:'ก.พ.',i:310000,e:162000},
+  {m:'มี.ค.',i:295000,e:155000},{m:'เม.ย.',i:85200,e:42800},
+  {m:'พ.ค.',i:0,e:0},{m:'มิ.ย.',i:0,e:0}
+];
+var months=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+var rptData=[{i:280000,e:148000},{i:310000,e:162000},{i:295000,e:155000},{i:85200,e:42800},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0}];
+var rptIdx=3;
+
+function fmt(n){return n>0?'฿'+Math.round(n).toLocaleString():'฿0';}
+function pct(a,b){return b?((a/b)*100).toFixed(1)+'%':'0%';}
+
+function buildBars(id,data){
+  var el=document.getElementById(id); if(!el)return;
+  var max=Math.max.apply(null,data.map(function(d){return Math.max(d.i,d.e);}));
+  var html='';
+  data.forEach(function(d){
+    var ih=d.i?Math.max(8,Math.round((d.i/max)*72)):0;
+    var eh=d.e?Math.max(8,Math.round((d.e/max)*72)):0;
+    html+='<div class="bar-col"><div class="bar-pair"><div class="bar inc-bar" style="height:'+ih+'px"></div><div class="bar exp-bar" style="height:'+eh+'px"></div></div><div class="bar-label">'+d.m+'</div></div>';
+  });
+  el.innerHTML=html;
+}
+
+function goPage(id,btn){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('pg-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='dash')buildBars('bar-chart',barData);
+}
+
+function dashTab(t,el){
+  document.querySelectorAll('#pg-dash .tab-btn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('dv-month').style.display=t==='month'?'block':'none';
+  document.getElementById('dv-year').style.display=t==='year'?'block':'none';
+  if(t==='year')buildBars('bar-chart-yr',yrData);
+}
+
+function pickTag(el,grp){
+  el.closest('.tag-wrap').querySelectorAll('.tag').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+}
+function pickTagRed(el,grp){
+  el.closest('.tag-wrap').querySelectorAll('.tag').forEach(function(t){t.classList.remove('active','red');});
+  el.classList.add('active','red');
+}
+
+function incMode(m,el){
+  document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active','green');});
+  el.classList.add('active','green');
+  document.getElementById('iv-key').style.display=m==='key'?'block':'none';
+  document.getElementById('iv-slip').style.display=m==='slip'?'block':'none';
+}
+
+function showToast(id,msg){
+  var t=document.getElementById(id);
+  if(msg)document.getElementById(id+'-msg').textContent=msg;
+  t.style.display='flex';
+  setTimeout(function(){t.style.display='none';},2500);
+}
+
+function saveInc(){
+  var amt=document.getElementById('inc-amt').value;
+  if(!amt){alert('กรุณากรอกจำนวนเงิน');return;}
+  document.getElementById('saving-inc').style.display='block';
+  setTimeout(function(){
+    document.getElementById('saving-inc').style.display='none';
+    showToast('t-inc','บันทึกรายรับ '+fmt(parseFloat(amt))+' สำเร็จ!');
+    document.getElementById('inc-amt').value='';
+    document.getElementById('inc-cust').value='';
+    document.getElementById('inc-note').value='';
+  },800);
+}
+
+function saveExp(){
+  var amt=document.getElementById('exp-amt').value;
+  if(!amt){alert('กรุณากรอกจำนวนเงิน');return;}
+  document.getElementById('saving-exp').style.display='block';
+  setTimeout(function(){
+    document.getElementById('saving-exp').style.display='none';
+    showToast('t-exp');
+    document.getElementById('exp-amt').value='';
+    document.getElementById('exp-detail').value='';
+    document.getElementById('exp-payee').value='';
+    document.getElementById('exp-note').value='';
+  },800);
+}
+
+function readSlip(){
+  document.getElementById('slip-box').style.display='none';
+  document.getElementById('slip-detected').style.display='block';
+  document.getElementById('slip-form').style.display='block';
+  var d=document.getElementById('slip-date');if(d)d.value=new Date().toISOString().split('T')[0];
+}
+function resetSlip(){
+  document.getElementById('slip-box').style.display='block';
+  document.getElementById('slip-detected').style.display='none';
+  document.getElementById('slip-form').style.display='none';
+}
+
+function filterChip(f,el){
+  document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('#hist-list .tx').forEach(function(tx){
+    if(f==='all'){tx.style.display='flex';return;}
+    var t=tx.dataset.type,c=(tx.dataset.cat||'').toLowerCase();
+    var show=(f==='inc'&&t==='inc')||(f==='exp'&&t==='exp')||(f==='shopee'&&c.includes('shopee'))||(f==='facebook'&&c.includes('facebook'))||(f==='cost'&&c.includes('ต้นทุน'));
+    tx.style.display=show?'flex':'none';
+  });
+}
+
+function filterHistory(q){
+  q=q.toLowerCase();
+  document.querySelectorAll('#hist-list .tx').forEach(function(tx){
+    tx.style.display=tx.textContent.toLowerCase().includes(q)?'flex':'none';
+  });
+}
+
+function changeMonth(d){
+  rptIdx=Math.max(0,Math.min(11,rptIdx+d));
+  var rd=rptData[rptIdx];
+  document.getElementById('rpt-month').textContent=months[rptIdx]+' 2569';
+  document.getElementById('r-inc').textContent=fmt(rd.i);
+  document.getElementById('r-exp').textContent=fmt(rd.e);
+  document.getElementById('r-bal').textContent=fmt(rd.i-rd.e);
+  document.getElementById('r-pct').textContent=pct(rd.i-rd.e,rd.i);
+}
+
+var today=new Date();
+['inc-date','exp-date','slip-date'].forEach(function(id){
+  var el=document.getElementById(id);if(el)el.value=today.toISOString().split('T')[0];
+});
+document.getElementById('hdr-date').textContent='วันนี้ '+today.getDate()+' เมษายน 2569';
+buildBars('bar-chart',barData);
+</script>
+</body>
+</html>

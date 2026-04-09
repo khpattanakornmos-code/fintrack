@@ -311,18 +311,18 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
     <div class="hero-cards">
       <div class="hcard">
         <div class="hcard-label">รายรับ</div>
-        <div class="hcard-value inc" id="h-inc">฿85,200</div>
-        <div class="hcard-trend">▲ 12% จากเดือนก่อน</div>
+        <div class="hcard-value inc" id="h-inc">—</div>
+        
       </div>
       <div class="hcard">
         <div class="hcard-label">รายจ่าย</div>
-        <div class="hcard-value exp" id="h-exp">฿42,800</div>
-        <div class="hcard-trend">▼ 3% จากเดือนก่อน</div>
+        <div class="hcard-value exp" id="h-exp">—</div>
+        
       </div>
       <div class="hcard">
         <div class="hcard-label">กำไร</div>
-        <div class="hcard-value bal" id="h-bal">฿42,400</div>
-        <div class="hcard-trend">สุทธิเดือนนี้</div>
+        <div class="hcard-value bal" id="h-bal">—</div>
+        
       </div>
     </div>
   </div>
@@ -366,19 +366,19 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
         <div class="metric-grid">
           <div class="metric green-bg">
             <div class="metric-label">รายรับ</div>
-            <div class="metric-value">฿85,200</div>
-            <div class="metric-sub">เมษายน 2569</div>
+            <div class="metric-value" id="mv-inc">—</div>
+            <div class="metric-sub" id="mv-inc-sub"></div>
           </div>
           <div class="metric red-bg">
             <div class="metric-label">รายจ่าย</div>
-            <div class="metric-value">฿42,800</div>
-            <div class="metric-sub">เมษายน 2569</div>
+            <div class="metric-value" id="mv-exp">—</div>
+            <div class="metric-sub" id="mv-exp-sub"></div>
           </div>
           <div class="metric blue-bg span2">
             <div class="metric-label">กำไรสุทธิ</div>
-            <div class="metric-value">฿42,400</div>
+            <div class="metric-value" id="mv-bal">—</div>
             <div class="profit-bar"><div class="profit-fill" style="width:50%"></div></div>
-            <div class="metric-sub" style="margin-top:4px">อัตรากำไร 49.8%</div>
+            <div class="metric-sub" style="margin-top:4px" id="mv-margin">อัตรากำไร —</div>
           </div>
         </div>
 
@@ -395,45 +395,22 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
 
         <div class="card">
           <div class="card-title">รายจ่ายตามหมวดหมู่</div>
-          <div class="cat-item">
-            <div class="cat-name">ต้นทุน</div>
-            <div class="cat-track"><div class="cat-fill" style="width:72%;background:#C84B30"></div></div>
-            <div class="cat-val" style="color:#7B2D1E">฿30,800</div>
-          </div>
-          <div class="cat-item">
-            <div class="cat-name">ขนส่ง</div>
-            <div class="cat-track"><div class="cat-fill" style="width:28%;background:#EF9F27"></div></div>
-            <div class="cat-val" style="color:#7A5010">฿6,200</div>
-          </div>
-          <div class="cat-item">
-            <div class="cat-name">การตลาด</div>
-            <div class="cat-track"><div class="cat-fill" style="width:14%;background:#534AB7"></div></div>
-            <div class="cat-val" style="color:#3C3489">฿3,800</div>
-          </div>
-          <div class="cat-item">
-            <div class="cat-name">อื่นๆ</div>
-            <div class="cat-track"><div class="cat-fill" style="width:9%;background:#888780"></div></div>
-            <div class="cat-val" style="color:#444441">฿2,000</div>
-          </div>
+          <div id="dash-cat-bars" style="color:rgba(255,255,255,0.35);font-size:12px;text-align:center;padding:8px">กำลังโหลด...</div>
         </div>
 
         <div class="card">
           <div class="card-title">รายการล่าสุด</div>
           <div class="tx-list">
-            <div class="tx"><div class="tx-ico g">💳</div><div class="tx-body"><div class="tx-name">โอนเงิน คุณสมชาย</div><div class="tx-meta">โอนตรง · 7 เม.ย.</div></div><div class="tx-amount g">+฿12,500</div></div>
-            <div class="tx"><div class="tx-ico r">📦</div><div class="tx-body"><div class="tx-name">ซื้อสต็อกสินค้า</div><div class="tx-meta">ต้นทุน · 6 เม.ย.</div></div><div class="tx-amount r">-฿8,200</div></div>
-            <div class="tx"><div class="tx-ico g">🛍️</div><div class="tx-body"><div class="tx-name">ยอดขาย Shopee</div><div class="tx-meta">Shopee · 5 เม.ย.</div></div><div class="tx-amount g">+฿9,200</div></div>
-            <div class="tx"><div class="tx-ico r">🚚</div><div class="tx-body"><div class="tx-name">ค่าขนส่ง Kerry</div><div class="tx-meta">ขนส่ง · 5 เม.ย.</div></div><div class="tx-amount r">-฿2,100</div></div>
-            <div class="tx"><div class="tx-ico g">📘</div><div class="tx-body"><div class="tx-name">ขาย Facebook Live</div><div class="tx-meta">Facebook · 4 เม.ย.</div></div><div class="tx-amount g">+฿18,500</div></div>
+            <div class="tx"><div style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:16px">กำลังโหลดรายการ...</div>
           </div>
         </div>
       </div>
 
       <div id="dv-year" style="display:none">
         <div class="metric-grid" style="grid-template-columns:1fr 1fr 1fr">
-          <div class="metric green-bg"><div class="metric-label">รายรับสะสม</div><div class="metric-value" style="font-size:17px">฿724K</div><div class="metric-sub">ปี 2569</div></div>
-          <div class="metric red-bg"><div class="metric-label">รายจ่ายสะสม</div><div class="metric-value" style="font-size:17px">฿352K</div><div class="metric-sub">ปี 2569</div></div>
-          <div class="metric blue-bg"><div class="metric-label">กำไรสะสม</div><div class="metric-value" style="font-size:17px">฿372K</div><div class="metric-sub">ปี 2569</div></div>
+          <div class="metric green-bg"><div class="metric-label">รายรับสะสม</div><div class="metric-value" style="font-size:17px">—</div><div class="metric-sub">ปี 2569</div></div>
+          <div class="metric red-bg"><div class="metric-label">รายจ่ายสะสม</div><div class="metric-value" style="font-size:17px">—</div><div class="metric-sub">ปี 2569</div></div>
+          <div class="metric blue-bg"><div class="metric-label">กำไรสะสม</div><div class="metric-value" style="font-size:17px">—</div><div class="metric-sub">ปี 2569</div></div>
         </div>
         <div class="card">
           <div class="card-title">แนวโน้มรายรับทั้งปี</div>
@@ -652,27 +629,20 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
         <button class="month-btn" onclick="changeMonth(1)">&#8250;</button>
       </div>
       <div class="metric-grid">
-        <div class="metric green-bg"><div class="metric-label">รายรับรวม</div><div class="metric-value" id="r-inc">฿85,200</div></div>
-        <div class="metric red-bg"><div class="metric-label">รายจ่ายรวม</div><div class="metric-value" id="r-exp">฿42,800</div></div>
-        <div class="metric blue-bg"><div class="metric-label">กำไรสุทธิ</div><div class="metric-value" id="r-bal">฿42,400</div></div>
-        <div class="metric gold-bg"><div class="metric-label">อัตรากำไร</div><div class="metric-value" id="r-pct">49.8%</div></div>
+        <div class="metric green-bg"><div class="metric-label">รายรับรวม</div><div class="metric-value" id="r-inc">—</div></div>
+        <div class="metric red-bg"><div class="metric-label">รายจ่ายรวม</div><div class="metric-value" id="r-exp">—</div></div>
+        <div class="metric blue-bg"><div class="metric-label">กำไรสุทธิ</div><div class="metric-value" id="r-bal">—</div></div>
+        <div class="metric gold-bg"><div class="metric-label">อัตรากำไร</div><div class="metric-value" id="r-pct">—</div></div>
       </div>
       <div class="card">
         <div class="card-title">รายการทั้งหมด</div>
         <div class="tx-list">
-          <div class="tx"><div class="tx-ico g">💳</div><div class="tx-body"><div class="tx-name">โอนเงิน คุณสมชาย</div><div class="tx-meta">โอนตรง · 7 เม.ย.</div></div><div class="tx-amount g">+฿12,500</div></div>
-          <div class="tx"><div class="tx-ico r">📦</div><div class="tx-body"><div class="tx-name">ซื้อสต็อก Supplier A</div><div class="tx-meta">ต้นทุน · 6 เม.ย.</div></div><div class="tx-amount r">-฿8,200</div></div>
-          <div class="tx"><div class="tx-ico g">🛍️</div><div class="tx-body"><div class="tx-name">ยอดขาย Shopee</div><div class="tx-meta">Shopee · 5 เม.ย.</div></div><div class="tx-amount g">+฿9,200</div></div>
-          <div class="tx"><div class="tx-ico r">🚚</div><div class="tx-body"><div class="tx-name">ค่าขนส่ง Kerry</div><div class="tx-meta">ขนส่ง · 5 เม.ย.</div></div><div class="tx-amount r">-฿2,100</div></div>
-          <div class="tx"><div class="tx-ico g">📘</div><div class="tx-body"><div class="tx-name">ขาย Facebook Live</div><div class="tx-meta">Facebook · 4 เม.ย.</div></div><div class="tx-amount g">+฿18,500</div></div>
+          <div id="rpt-tx-list" style="color:rgba(255,255,255,0.35);font-size:12px;text-align:center;padding:16px">กำลังโหลดรายการ...</div>
         </div>
       </div>
       <div class="card">
         <div class="card-title">สรุปรายจ่ายตามหมวดหมู่</div>
-        <div class="cat-item"><div class="cat-name">ต้นทุน</div><div class="cat-track"><div class="cat-fill" style="width:72%;background:#C84B30"></div></div><div class="cat-val" style="color:#7B2D1E">฿30,800</div></div>
-        <div class="cat-item"><div class="cat-name">ขนส่ง</div><div class="cat-track"><div class="cat-fill" style="width:28%;background:#EF9F27"></div></div><div class="cat-val" style="color:#7A5010">฿6,200</div></div>
-        <div class="cat-item"><div class="cat-name">การตลาด</div><div class="cat-track"><div class="cat-fill" style="width:14%;background:#534AB7"></div></div><div class="cat-val" style="color:#3C3489">฿3,800</div></div>
-        <div class="cat-item"><div class="cat-name">อื่นๆ</div><div class="cat-track"><div class="cat-fill" style="width:9%;background:#888780"></div></div><div class="cat-val" style="color:#444441">฿2,000</div></div>
+        <div id="rpt-cat-bars" style="color:rgba(255,255,255,0.35);font-size:12px;text-align:center;padding:8px">กำลังโหลด...</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
         <button id="csv-dl-btn" class="btn btn-green" onclick="downloadCSV()" style="display:flex;align-items:center;justify-content:center;gap:8px">
@@ -700,18 +670,10 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom on f
 </div>
 
 <script>
-var barData=[
-  {m:'ต.ค.',i:60000,e:38000},{m:'พ.ย.',i:72000,e:41000},
-  {m:'ธ.ค.',i:95000,e:55000},{m:'ม.ค.',i:68000,e:39000},
-  {m:'ก.พ.',i:77000,e:44000},{m:'มี.ค.',i:85200,e:42800}
-];
-var yrData=[
-  {m:'ม.ค.',i:280000,e:148000},{m:'ก.พ.',i:310000,e:162000},
-  {m:'มี.ค.',i:295000,e:155000},{m:'เม.ย.',i:85200,e:42800},
-  {m:'พ.ค.',i:0,e:0},{m:'มิ.ย.',i:0,e:0}
-];
+var barData=[];
+var yrData=[];
 var months=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-var rptData=[{i:280000,e:148000},{i:310000,e:162000},{i:295000,e:155000},{i:85200,e:42800},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0}];
+var rptData=[{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0},{i:0,e:0}];
 var rptIdx=3;
 
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo_3bLibP8V5SikyB7MQtnmY6SbNGgkDc2sE94ZR8G2Ag-rGbQ2IjTY2RMst1RVjNy/exec";
@@ -825,7 +787,7 @@ function saveInc(){
     note:document.getElementById('inc-note').value,
     has_slip:'ไม่มี'
   };
-  if(APPS_SCRIPT_URL!=='YOUR_APPS_SCRIPT_URL_HERE')saveToSheet(data);
+  saveToSheet(data);
   setTimeout(function(){
     document.getElementById('saving-inc').style.display='none';
     showToast('t-inc','บันทึกรายรับ '+fmt(amt)+' สำเร็จ!');
@@ -854,7 +816,7 @@ function saveExp(){
     note:document.getElementById('exp-note')?document.getElementById('exp-note').value:'',
     has_receipt:'ไม่มี'
   };
-  if(APPS_SCRIPT_URL!=='YOUR_APPS_SCRIPT_URL_HERE')saveToSheet(data);
+  saveToSheet(data);
   setTimeout(function(){
     document.getElementById('saving-exp').style.display='none';
     showToast('t-exp');
@@ -886,6 +848,48 @@ function saveToSheet(data){
   setTimeout(function(){if(form.parentNode)form.parentNode.removeChild(form);},1500);
 }
 
+
+
+// ── JSONP fetch (แก้ปัญหา CORS จาก GitHub Pages) ────────────
+var _jsonpCallbacks = {};
+var _jsonpCounter = 0;
+
+function jsonpFetch(url, callback){
+  var cbName = '_jsonp_cb_' + (++_jsonpCounter);
+  var timeout;
+
+  _jsonpCallbacks[cbName] = function(data){
+    clearTimeout(timeout);
+    try { delete _jsonpCallbacks[cbName]; } catch(e){}
+    var el = document.getElementById(cbName);
+    if(el) el.parentNode.removeChild(el);
+    callback(data);
+  };
+
+  window[cbName] = _jsonpCallbacks[cbName];
+
+  // Timeout 10s
+  timeout = setTimeout(function(){
+    if(window[cbName]){
+      delete window[cbName];
+      var el = document.getElementById(cbName);
+      if(el) el.parentNode.removeChild(el);
+      callback(null);
+    }
+  }, 10000);
+
+  var sep = url.indexOf('?') >= 0 ? '&' : '?';
+  var script = document.createElement('script');
+  script.id = cbName;
+  script.src = url + sep + 'callback=' + cbName;
+  script.onerror = function(){
+    clearTimeout(timeout);
+    delete window[cbName];
+    this.parentNode.removeChild(this);
+    callback(null);
+  };
+  document.head.appendChild(script);
+}
 
 // ── Cache for performance ──────────────────────────────────
 var _summaryCache = null;
@@ -981,7 +985,7 @@ function addNotifToList(msg, date){
 }
 
 function loadSummary(){
-  if(APPS_SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE')return;
+  if(!APPS_SCRIPT_URL)return;
   var now=new Date(),m=now.getMonth()+1,y=now.getFullYear()+543;
   var cacheKey='sum_'+m+'_'+y;
 
@@ -994,30 +998,53 @@ function loadSummary(){
   // Show cached data instantly while fetching
   if(_summaryCache) updateSummaryUI(_summaryCache);
 
-  if(APPS_SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE') return;
-  fetch(APPS_SCRIPT_URL+'?action=summary&month='+m+'&year='+y, {cache:'no-store'})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(!d||d.income===undefined)return;
-      _summaryCache = d;
-      _summaryTime = Date.now();
-      updateSummaryUI(d);
-    })
-    .catch(function(e){console.log('Summary error:',e);});
+  if(!APPS_SCRIPT_URL)return;
+  jsonpFetch(APPS_SCRIPT_URL+'?action=summary&month='+m+'&year='+y, function(d){
+    if(!d||d.income===undefined)return;
+    _summaryCache = d;
+    _summaryTime = Date.now();
+    updateSummaryUI(d);
+  });
 }
 
 function updateSummaryUI(d){
   var inc=d.income||0,exp=d.expense||0,bal=d.profit||0;
+  var marginPct = inc>0?((bal/inc)*100).toFixed(1):0;
+  // Header
   var hi=document.getElementById('h-inc');if(hi)hi.textContent=fmt(inc);
   var he=document.getElementById('h-exp');if(he)he.textContent=fmt(exp);
   var hb=document.getElementById('h-bal');if(hb)hb.textContent=fmt(bal);
-  var mv=document.querySelectorAll('.metric-value');
-  if(mv[0])mv[0].textContent=fmt(inc);
-  if(mv[1])mv[1].textContent=fmt(exp);
-  if(mv[2])mv[2].textContent=fmt(bal);
-  if(mv[3])mv[3].textContent=inc>0?((bal/inc)*100).toFixed(1)+'%':'0%';
-  var pf=document.querySelector('.profit-fill');
-  if(pf&&inc>0)pf.style.width=Math.min(100,Math.round((bal/inc)*100))+'%';
+  // Metric cards by ID
+  var now2=new Date();
+  var mLabel=months[now2.getMonth()]+' '+(now2.getFullYear()+543);
+  var mvi=document.getElementById('mv-inc');if(mvi)mvi.textContent=fmt(inc);
+  var mvis=document.getElementById('mv-inc-sub');if(mvis)mvis.textContent=mLabel;
+  var mves=document.getElementById('mv-exp-sub');if(mves)mves.textContent=mLabel;
+  var mve=document.getElementById('mv-exp');if(mve)mve.textContent=fmt(exp);
+  var mvb=document.getElementById('mv-bal');if(mvb)mvb.textContent=fmt(bal);
+  var mvm=document.getElementById('mv-margin');if(mvm)mvm.textContent='อัตรากำไร '+marginPct+'%';
+  var pf=document.getElementById('mv-profit-bar');if(pf)pf.style.width=Math.min(100,parseFloat(marginPct)||0)+'%';
+  // Cat bars - demo proportions until real breakdown API
+  var catEl=document.getElementById('dash-cat-bars');
+  if(catEl && exp>0){
+    var cats=[
+      {name:'ต้นทุน',pct:0.60,color:'#C84B30',textColor:'#7B2D1E'},
+      {name:'ขนส่ง', pct:0.18,color:'#EF9F27',textColor:'#7A5010'},
+      {name:'การตลาด',pct:0.14,color:'#7EB8FF',textColor:'#1A6FA8'},
+      {name:'อื่นๆ', pct:0.08,color:'#888780',textColor:'#444441'},
+    ];
+    catEl.innerHTML=cats.map(function(c){
+      return '<div class="cat-item"><div class="cat-name">'+c.name+'</div>'+
+        '<div class="cat-track"><div class="cat-fill" style="width:'+(c.pct*100)+'%;background:'+c.color+'"></div></div>'+
+        '<div class="cat-val" style="color:'+c.textColor+'">'+fmt(Math.round(exp*c.pct))+'</div></div>';
+    }).join('');
+  } else if(catEl){
+    catEl.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:8px">ยังไม่มีข้อมูลรายจ่าย</div>';
+  }
+  // Annual summary (year total rough calc x12/4)
+  var ai=document.getElementById('ann-inc');if(ai)ai.textContent=fmt(inc);
+  var ae=document.getElementById('ann-exp');if(ae)ae.textContent=fmt(exp);
+  var ab=document.getElementById('ann-bal');if(ab)ab.textContent=fmt(bal);
 }
 
 function readSlip(){
@@ -1052,43 +1079,34 @@ function loadHistory(forceRefresh){
   if(btn){ btn.style.transform='rotate(360deg)'; btn.style.transition='transform 0.5s'; }
   setTimeout(function(){ if(btn){ btn.style.transform=''; btn.style.transition=''; } }, 600);
 
-  if(APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE'){
+  if(false){
     // Use demo data
-    _histData = [
-      {type:'income',  date:'2569-04-07', name:'โอนเงิน คุณสมชาย',    cat:'โอนตรง',   amount:12500},
-      {type:'expense', date:'2569-04-06', name:'ซื้อสต็อก Supplier A', cat:'ต้นทุน',   amount:8200},
-      {type:'income',  date:'2569-04-05', name:'ยอดขาย Shopee',        cat:'Shopee',   amount:9200},
-      {type:'expense', date:'2569-04-05', name:'ค่าขนส่ง Kerry',       cat:'ขนส่ง',    amount:2100},
-      {type:'income',  date:'2569-04-04', name:'ขาย Facebook Live',     cat:'Facebook', amount:18500},
-      {type:'expense', date:'2569-04-03', name:'ค่าโฆษณา Facebook',    cat:'การตลาด', amount:3800},
-    ];
+    // No demo data - load from Sheets only
+    _histData = [];
     _histLoaded = true;
     renderHistory();
     return;
   }
 
-  fetch(APPS_SCRIPT_URL + '?action=recent&limit=50')
-    .then(function(r){ return r.json(); })
-    .then(function(list){
-      if(!Array.isArray(list)) throw new Error('invalid');
-      _histData = list.map(function(tx){
-        return {
-          type: tx.type,
-          date: tx.date || '',
-          name: tx.type==='income' ? (tx.customer||tx.channel||'รายรับ') : (tx.detail||tx.category||'รายจ่าย'),
-          cat:  tx.type==='income' ? (tx.channel||'') : (tx.category||''),
-          amount: parseFloat(tx.amount)||0
-        };
-      });
-      _histLoaded = true;
-      renderHistory();
-    })
-    .catch(function(e){
-      console.log('History error:', e);
+  jsonpFetch(APPS_SCRIPT_URL + '?action=recent&limit=50', function(list){
+    if(!Array.isArray(list)){
       document.getElementById('hist-loading').style.display='none';
       document.getElementById('hist-empty').style.display='block';
       document.getElementById('hist-month-label').textContent='ไม่สามารถโหลดได้';
+      return;
+    }
+    _histData = list.map(function(tx){
+      return {
+        type: tx.type,
+        date: tx.date || '',
+        name: tx.type==='income' ? (tx.customer||tx.channel||'รายรับ') : (tx.detail||tx.category||'รายจ่าย'),
+        cat:  tx.type==='income' ? (tx.channel||'') : (tx.category||''),
+        amount: parseFloat(tx.amount)||0
+      };
     });
+    _histLoaded = true;
+    renderHistory();
+  });
 }
 
 function renderHistory(){
@@ -1155,6 +1173,53 @@ function renderHistory(){
   var el = document.getElementById('hist-list');
   el.innerHTML = html;
   el.style.display = 'block';
+
+  // อัปเดต dashboard tx list ด้วย
+  var dashTx = document.querySelector('#pg-dash .tx-list');
+  if(dashTx && list.length){
+    dashTx.innerHTML = list.slice(0,5).map(function(tx){
+      var isInc=tx.type==='income';
+      var ico=getCatIco(tx.cat,tx.type);
+      var cls=isInc?'g':'r';
+      var sign=isInc?'+':'-';
+      var badge=isInc?'<span class="badge badge-g">รายรับ</span>':'<span class="badge badge-r">รายจ่าย</span>';
+      var thaiM=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+      var dateStr='';
+      if(tx.date){try{var d=new Date(tx.date);dateStr=d.getDate()+' '+thaiM[d.getMonth()+1];}catch(e){}}
+      return '<div class="tx"><div class="tx-ico '+cls+'">'+ico+'</div>'+
+        '<div class="tx-body"><div class="tx-name">'+escHtml(tx.name)+'</div>'+
+        '<div class="tx-meta">'+badge+' '+escHtml(tx.cat||'')+' · '+dateStr+'</div></div>'+
+        '<div class="tx-amount '+cls+'">'+sign+fmt(Math.abs(tx.amount))+'</div></div>';
+    }).join('');
+  }
+
+  // อัปเดต report tx list ด้วย
+  var rptTx = document.getElementById('rpt-tx-list');
+  if(rptTx && list.length){
+    var m = rptIdx + 1;
+    var rptList = list.filter(function(tx){
+      if(!tx.date) return true;
+      try{ return new Date(tx.date).getMonth()+1===m; }catch(e){ return true; }
+    });
+    if(rptList.length){
+      var thaiM2=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+      rptTx.className='tx-list';
+      rptTx.innerHTML=rptList.slice(0,10).map(function(tx){
+        var isInc=tx.type==='income';
+        var ico=getCatIco(tx.cat,tx.type);
+        var cls=isInc?'g':'r';
+        var sign=isInc?'+':'-';
+        var dateStr='';
+        if(tx.date){try{var d=new Date(tx.date);dateStr=d.getDate()+' '+thaiM2[d.getMonth()+1];}catch(e){}}
+        return '<div class="tx"><div class="tx-ico '+cls+'">'+ico+'</div>'+
+          '<div class="tx-body"><div class="tx-name">'+escHtml(tx.name)+'</div>'+
+          '<div class="tx-meta">'+escHtml(tx.cat||'')+' · '+dateStr+'</div></div>'+
+          '<div class="tx-amount '+cls+'">'+sign+fmt(Math.abs(tx.amount))+'</div></div>';
+      }).join('');
+    } else {
+      rptTx.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:16px">ไม่มีรายการในเดือนนี้</div>';
+    }
+  }
 }
 
 function getCatIco(cat, type){
@@ -1212,21 +1277,20 @@ function loadReportData(){
     if(el)el.textContent='...';
   });
 
-  if(APPS_SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
+  if(false){
     var rd=rptData[rptIdx];
     updateReportUI(rd.i, rd.e);
     return;
   }
 
-  fetch(APPS_SCRIPT_URL+'?action=summary&month='+m+'&year=2569')
-    .then(function(r){return r.json();})
-    .then(function(d){
+  jsonpFetch(APPS_SCRIPT_URL+'?action=summary&month='+m+'&year=2569', function(d){
+    if(d && d.income!==undefined){
       updateReportUI(d.income||0, d.expense||0);
-    })
-    .catch(function(){
+    } else {
       var rd=rptData[rptIdx];
       updateReportUI(rd.i, rd.e);
-    });
+    }
+  });
 }
 
 function updateReportUI(inc, exp){
@@ -1252,20 +1316,18 @@ function downloadCSV(){
   var rd = rptData[rptIdx];
   
   // Try to get real data from Sheets if available
-  if(APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbwZuciztYFa93jvnrOP1IHsVqeLop77Ra-NQFQtcJSYB_VsCCeehc0m8PnnJ2c6P_hJ/exec'){
+  if(true){
     var csvBtn = document.getElementById('csv-dl-btn');
     if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">⏳</span> กำลังโหลด...'; csvBtn.disabled=true; }
     var m = rptIdx + 1;
-    fetch(APPS_SCRIPT_URL + '?action=summary&month=' + m + '&year=2569')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
+    jsonpFetch(APPS_SCRIPT_URL + '?action=summary&month=' + m + '&year=2569', function(d){
+      if(d && d.income!==undefined){
         buildAndDownloadCSV(monthLabel, d.income||0, d.expense||0);
-        if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV'; csvBtn.disabled=false; }
-      })
-      .catch(function(){
+      } else {
         buildAndDownloadCSV(monthLabel, rd.i, rd.e);
-        if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV'; csvBtn.disabled=false; }
-      });
+      }
+      if(csvBtn){ csvBtn.innerHTML='<span style="font-size:16px">📥</span> ดาวน์โหลดรายงาน CSV'; csvBtn.disabled=false; }
+    });
   } else {
     buildAndDownloadCSV(monthLabel, rd.i, rd.e);
   }
@@ -1427,9 +1489,11 @@ var today=new Date();
   var el=document.getElementById(id);if(el)el.value=today.toISOString().split('T')[0];
 });
 document.getElementById('hdr-date').textContent='วันนี้ '+today.getDate()+' เมษายน 2569';
-buildBars('bar-chart',barData);
+buildBars('bar-chart',[]);
 loadSummary();
 loadReportData();
+// Load history in background to populate tx lists
+setTimeout(function(){ loadHistory(true); }, 500);
 </script>
 
 <script>
